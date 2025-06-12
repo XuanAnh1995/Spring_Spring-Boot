@@ -8,19 +8,22 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.Nationalized;
+//import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "Student")    // Nếu không có khai báo này, mặc định lấy tên class thành tên table !!!
 public class Student {
 
     @Id
-    @Column(name = "Id")    // nếu ko có khai báo này , thì mặc định lấy tên field làm tên cột
+    @Column(name = "Id", columnDefinition = "CHAR(8)")    // nếu ko có khai báo này , thì mặc định lấy tên field làm tên cột
     private String id;   // camelCase, id tự nhập (id tự tăng tính sau)
 
-    @Column(name = "Name", nullable = false, length = 50)
-    @Nationalized   // THIẾU KHAI BÁO NÀY THÌ STRING -> VARCHAR KO LƯU TIẾNG VIỆT CÓ DẤU. ĐỂ STRING NVARCHAR THÌ CẦN THÊM KHAI BÁO @NATIONALIZED
+    @Column(name = "Name", nullable = false,
+    columnDefinition = "NVARCHAR(50)")
+//    @Nationalized   // THIẾU KHAI BÁO NÀY THÌ STRING -> VARCHAR KO LƯU TIẾNG VIỆT CÓ DẤU. ĐỂ STRING NVARCHAR THÌ CẦN THÊM KHAI BÁO @NATIONALIZED
     // NẾU KO LÀM, TIẾNG VIỆT SẼ DẤU ? THAY THẾ CHO DẤU '\?~/
+    // TA DÙNG @Nationalized CỦA HIBERNATE SẼ MẤT TÍNH KHA CHUYỂN KHI CODE NÀY KO THỂ CHƠI ĐƯỢC VỚI NHÀ THẦU ECLIPSELINK
+    // ĐỘ VARCHAR CHƠI VỚI NHIỀU NHÀ CUNG CẤP ORM/JPA QUA COLUMNDEFINITION
     private String name;
 
     @Column(name = "Yob", nullable = false)

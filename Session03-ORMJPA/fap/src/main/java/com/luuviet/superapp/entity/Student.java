@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "Student")    // Nếu không có khai báo này, mặc định lấy tên class thành tên table !!!
@@ -18,6 +19,8 @@ public class Student {
     private String id;   // camelCase, id tự nhập (id tự tăng tính sau)
 
     @Column(name = "Name", nullable = false, length = 50)
+    @Nationalized   // THIẾU KHAI BÁO NÀY THÌ STRING -> VARCHAR KO LƯU TIẾNG VIỆT CÓ DẤU. ĐỂ STRING NVARCHAR THÌ CẦN THÊM KHAI BÁO @NATIONALIZED
+    // NẾU KO LÀM, TIẾNG VIỆT SẼ DẤU ? THAY THẾ CHO DẤU '\?~/
     private String name;
 
     @Column(name = "Yob", nullable = false)

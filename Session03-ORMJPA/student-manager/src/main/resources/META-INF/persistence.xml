@@ -4,9 +4,12 @@
              version="3.0">
     <persistence-unit name="com.luuviet.superapp-PU" transaction-type="RESOURCE_LOCAL">
         <!-- Khai báo các entity class để map xuống table -->
-                <class>com.luuviet.superapp.entity.Student</class>
-                <class>com.luuviet.superapp.entity.Lecturer</class>
-
+<!--                <class>com.luuviet.superapp.entity.unione.Student</class>-->
+<!--                <class>com.luuviet.superapp.entity.unione.Major</class>-->
+<!--        <class>com.luuviet.superapp.entity.unimany.Student</class>-->
+<!--        <class>com.luuviet.superapp.entity.unimany.Major</class>-->
+        <class>com.luuviet.superapp.entity.bidirectional.Student</class>
+        <class>com.luuviet.superapp.entity.bidirectional.Major</class>
         <!-- Cấu hình kết nối CSDL -->
         <properties>
             <!-- JDBC Driver dùng MS SQL Server -->

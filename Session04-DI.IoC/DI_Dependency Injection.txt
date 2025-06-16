@@ -1,0 +1,237 @@
+GIẢI NGỐ VỀ DI - DEPENDENCY INJECTION
+> TA SẼ HỌC NHỮNG MÓN
+- DENPENDENCY
+- DEPENDENCY INJECTION (TIÊM, CHÍCH - ĐƯA THỨ BÊN NGOÀI VÀO TRONG)
+- TIGHT COUPLING, LOOSE COUPLING
+- S, O, D (S.O.L.I.D)
+- IoC (Inversion of Control)
+- IoC Container
+...
+
+> KỸ NĂNG , KIẾN THỨC Ở TRÊN PHI NGÔN NGỮ, NÓ CÓ THỂ ÁP DỤNG CHO MỌI NGÔN NGỮ LẬP TRÌNH, ÁP DỤNG CHO VIỆC THIẾT KẾ APP, CHIA CODE THÀNH CÁC THÀNH PHẦN ĐỂ DỄ KIỂM SOÁT, BẢO TRÌ , NÂNG CẤP, MỞ RỘNG, 
+> DÙNG TRẢ LỜI ĐI PHỎNG VẤN
+
+I. DEPENDENCY LÀ GÌ?
+1. CLASS A KHAI BÁO BIẾN THUỘC CLASS B, CẦN B ĐỂ GIÚP CÔNG VIỆC GÌ ĐÓ     	CHO A MÀ B CHUYÊN TRÁCH, B GIỎI, THÌ B GỌI LÀ DEPENDENCY CỦA A
+	NÓI CÁCH KHÁC A PHỤ THUỘC VÀO B THÌ B GỌI LÀ DEPENDENCY CỦA A
+
+public class A {
+	B objB;		// objB là obj, thuộc , clone từ class B
+			// B ĐƯỢC GỌI LÀ DEPENDENCY CỦA A, A PHỤ THUỘC 				VÀO B ĐỂ LÀM GÌ 
+}
+	
+public class B {	// giỏi việc nào , chuyên việc nào đó
+	// ...
+	void doSomething(){...}
+}
+
+2. DEPENDENCY CÒN LÀ CÁC THƯ VIỆN LẬP TRÌNH (CHẲNG QUA GỒM BÊN TRONG  	NHIỀU CLASS LÀM VIỆC GÌ ĐÓ) , TA CÓ JDBC DEPENDENCY, JUNIT 	DEPENDENCY , LOMBOK DEPENDENCY, HIBERNATE, JPA DEPENDENCY
+
+3. A PHỤ THUỘC VÀO B, B LÀ DEPENDENCY CỦA A, TỨC LÀ 2 CLASS CÓ GẮN KẾT, CẦN NHAU (A CẦN B ĐÚNG HƠN) GỌI LÀ COUPLING
+- GẮN KẾT CHẶT CHẼ HAY LỎNG LẺO ???
+
+II. TIGHT COUPLING, LOOSE COUPLING - CHẮC CHẮN DÍNH DÁNH DEPENDENCY, CLASS NÀY CẦN CLASS KIA
+
+1. TIGHT COUPLING - GẮN KẾT , PHỤ THUỘC CHẶT CHẼ
+CLASS A CẦN CLASS B, QUẢN LÍ LUÔN VÒNG ĐỜI OBJECT CLASS B (TẠO, HỦY) TRONG LÒNG CLASS A
+
+public static void main(){
+	A objA = new A();	// KHI NEW A ĐÃ CÓ NGAY B BÊN TRONG 				LÒNG
+				// CÓ A LÀ ĐÃ CÓ B
+}
+
+public class A {
+	B objB = new B();		// tight coupling
+}
+	
+public class B {	// giỏi việc nào , chuyên việc nào đó
+	// ...
+	void doSomething(){...}
+}
+
+* VẤN ĐỀ CỦA TIGHT COUPLING
+- A CHỈ CHƠI VỚI B MÀ THÔI
+- KHI B CHƯA CODE XONG, THÌ KHÓ CÓ THỂ RUN A
+- NẾU MUỐN THAY THẾ B BẰNG B' TƯƠNG ƯƠNG VỀ KHẢ NĂNG GIẢI QUYẾT VẤN ĐỀ
+(THAY HIBERNATE BẰNG ECLIPSELINK) THÌ CHẮC CHẮN PHẢI SỬA CODE CỦA A !!!
+- ...
+
+================================
+VÍ DỤ DEMO
+- TA CẦN LÀM APP, TRONG Ó CÓ CHỨC NĂNG ĂNG KÝ MEMBER - REGISTER AN ACCOUNT / SIGN UP 
+- UI (FORM ĐĂNG KÝ)
+	- GÕ USERNAME/PASS/RE-PASS/ EMAIL, PHONE, WHATSAPP ID
+	- NHẤN NÚT ĂNG KÝ
+- ...
+- UserService (Business Logic Layer - BLL)	
+	- Hàm / method registerAccount(Account obj) // obj: chứa user, 	pass, email, phone, whatsappid, ...
+	code phải gọi UserRepository - chuyên giỏi CRUD table User 
+					// dependency
+	GỬI EMAIL CONFIRM; HOẶC
+	GỬI SMS CONFRIM; HOẶC
+	GỬI NOTI ĐẾN WHATSAPP;
+	||||			||||
+				TÁCH CODE RIÊNG RA KHỎI UserService
+				thành Service riêng lo gửi SMS, Mail
+				
+
+- UserRepository (Data Access Layer - DAL)
+	- Hàm CRUD Table Account , dùng JPA/Hibernate/ JpaUtil -> 	Spring Data, Spring JPA
+	||||
+	TABLE ACCOUNT
+
+- USER SERVICE CÓ 2 DEPENDENCY 
+	1. USER- REPOSITORY CHUYÊN LO CRUD
+	2. NOTI SENDER, GÃ CHUYÊN LO SMS, MAIL, WHATSAPP
+
+>>>>>> GHI CHÚ TIGHT COUPLING 
+- CLASS A KHAI BÁO BIẾN OBJ CLASS B VÀ NEW B() TRONG CLASS A
+	- A KIỂM SOÁT OBJ B, TIGHT COUPLING , FULL CONTROL OBJ B , 	HARD-CODED DEPENDENCY TRONG LÒNG A, CODE A CÓ CỨNG SẴN OBJ B
+	- DIRECT CONTROL, A TRỰC TIẾP KIỂM SOÁT B
+
+
+2. LOOSE COUPING - A THẢ LỎNG B RA, KO KIỂM SOÁT B CHẶT CHẼ NỮA, DEPENDENCY LỘ DIỆN RA NGOÀI THẢ LỎNG RA, THẬM CHÍ KO NEW B TRONG A !!!!!!!!!
+XEM THÊM MỤC IV: DEPENDENCY INJECTION , IOC, CONTAINER
+
+III. S TRONG SOLID - SRP - SINGLE RESPONSIBILITY PRINCIPLE
+1. MỖI CLASS ĐC THIẾT KẾ RA CHỈ NÊN GIẢI QUYẾT 1 CÔNG VIỆC NÀO DO, CHUYÊN BIỆT ĐỂ LÀM 1 VIỆC GÌ ĐÓ NÓ GIỎI. NÓ SẼ CUNG CẤP DỊCH VỤ CHO BÊN KHÁC DÙNG
+
+- MẠNG: 1 CLASS KHI CẦN CHỈNH SỬA THÌ CHỈ CÓ 1 LÍ DO ĐỂ CHỈNH SỬA, 1 CHỖ ĐỂ CHỈNH SỬA
+
+* TA CÓ CLASS public class NotiSender{
+	- code gửi SMS
+	- code gửi Email
+	- code gửi WhatsApp
+}
+> ĐANG VI PHẠM SRP - SINGLE RESPONSEBILITY PRINCIPLE, VÌ CÓ ĐẾN 3 CHỖ KHÁC NHAU ĐỂ SỬA KHI CẦN NÂNG CẤP CODE, MỞ RỘNG CODE, FIX CODE, VÍ DỤ:
+	- SỬA SMS ĐỂ SUPPORT CHO TỔNG ĐÀI VIETEL, MOBI, VINA
+	- SỬA SMS ĐỂ SUPPORT CHO Gmail. MS Mail, Yahoo,...
+	- SỬA WhatsApp
+
+* TA CÓ CLASS public class NotiSender{
+	- code gửi SMS		-> ĐẠT SRP, VÌ CHỈ CÓ SỬA SMS MÀ THÔI
+	// code gửi Email
+	// code gửi WhatsApp
+}
+
+* KO NHẦM LẪN RẰNG SRP NGHĨA LÀ CLASS CHỈ CÓ 1 HÀM MÀ PHẢI HIỀU LÀ
+	- CLASS CÓ NHIỀU HÀM, CÁC HÀM XOAY QUANH 1 CHỦ THỂ, VẬT NÀO 	ĐÓ, ENTITY NÀO ĐÓ, OBJ NÀO ĐÓ CẦN ĐƯỢC XỬ LÝ
+	- CLASS USE-REPO CÓ 4 HÀM CRUD NHƯNG CHỈ XOAY QUANH 	USER/ACCOUNT !!!! 1 CHỦ THỂ 
+	- NẾU CÓ NHIỀU CHỦ THỂ CẦN XỬ LÝ TRONG 1 CLASS , VI PHẠM SRP 
+	NotiSender chứa cả SMS, Mail, WhatsApp, 3 CHỦ THỂ , VI PHẠM 	RỒI
+
+
+IV: DEPENDENCY INJECTION - TIÊM/CHÍCH VÀO CLASS CHÍNH !!!!!!!!\
+- CLASS CHÍNH KO CHỦ ĐỘNG KIỂM SOÁT NỮA
+* CODE CŨ: TIGHT COUPLING / HARD-CODE DEPENDENCY / DIRECT CONTROL / FULL CONTROL
+ new A () có sẵn B được new bên trong, ta nhìn bên ngoài A , ko biết dc rằng trong A có B
+
+* CODE MỚI: KO FULL CONTROL NỮA, THẢ LỎNG RA, B LỘ MẶT!!!
+new A() ; và phải new B() ngoài A, 
+LOOSE COUPLING , TAO A CÓ, CHƯA CHẮC ĐÃ  CÓ MÀY B, DÙ MÀY B PHỤ THUỘC CỦA TAO
+TUI CẦN ANH, NHƯNG CHƯA CHẮC ĐÃ CÓ ANH KHI CÓ TÔI !!!!!!!!
+TUI CẦN ANH, ANH PHẢI CÓ MẶT CHO TUI NHÉ !!!!!!
+
+>>> LỢI ÍCH VIỆC THẢ LỎNG DEPENDENCY LÀ GÌ???
+
+TA CLASS A , CLASS SERVICE KO FULL CONTROL VIỆC TẠO OBJ B, MÀ VIỆC TẠO , VIỆC NEW B() NEW DEPENDENCY  CHỖ KHÁC, RỒI CHÍCH/ TIÊM VÀO
+	TA ĐÃ CHUYỂN GIAO, ĐẢO QUYỀN / GIẢM QUYỀN KIỂM SOÁT DEPENDENCY 
+		IoC INVERSION OF CONTROL, ĐẢO QUYỀN KIỂM SOÁT VIỆC NEW 		DEPENDENCY
+
+>>>>> DEPENDENCY INJECTION
+- CÁCH TIGHT-COUPLING: NHÀ TA CÓ SẴN CÁC BÁC THỢ SỬA,THỢ DỊCH VJ CẦN LÀ CÓ, NHƯNG PHỤ THUỘC CHẶT CHẼ , NEW OBJ CLASS B TRONG LÒNG CLASS A
+- LOOSE-COUPLING: NHÀ TA KO CÓ SẴN, MÀ TA SẼ GỌI ĐIỆN THOẠI CÁC BÁC CHẠY ĐẾN GIÚP, DEPENDENCY INJECTTION, CÁC BÁC GHÉ NHÀ EM
+
+CHỜ CÁC BÁC GHÉ - CHÍCH/ TIÊM VÀO
+CÓ 3 CÁCH CHỜ BÁC GHÉ:
+
+public class A{
+	private B bObj;		// ko new , ko gắn chặt, vậy làm sao 				gán  giá trị
+				// có 4 cách
+	
+}
+
+Cách 1: gán bObj = new B() 	qua reflection (kĩ thuật nâng cao)
+
+				qua public B bObj // vi phạm 					ENCAPSULATION
+
+Cách 2: gán bObj = new B()	qua constructor - tiêm/ chích qua constructor
+
+
+Cách 3: gán bObj = new B()	qua hàm set() và hàm setter()
+
+====================================
+1. IoC LÀ 1 NGUYÊN LÍ THIẾT KẾ CLASS PHỤ THUỘC NHAU, NÓ LÀ LÝ TƯỞNG, LÝ THUYẾT, LỜI KÊU GỌI CHỨ NÓ KO NÓI CỤ THỂ LÀM THẾ NÀO, NÓ ABSTRACT
+
+2. DEPENDENCY INJECTION LÀ PHIÊN BẢN CỤ THỂ, IMPLEMENT CHO IoC
+
+3. NGOÀI DEPENDENCY INJECT, CÒN 1 VÀI CÁCH KHÁC ĐẠT IoC, ĐẢM BẢO VIỆC CLASS CHÍNH KO ÔM FULL CONTROL MỌI VIỆC, CẦN THÌ GỌI DỊCH VỤ BÊN NGOÀI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

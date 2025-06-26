@@ -9,7 +9,7 @@ import java.util.List;
 public class StudentRepository {
 
     // CLASS NÀY SẼ CHỨA CÁC HÀM CRUD TRỰC TIẾP TABLE STUDENT
-    // MUỐN CRUD TABLE THÌ PHẢI NHỜ VẢ ÔNG ENTITYMANAGER ĐƯỢC CUNG CẤP TỪ JpaUtil SINGLETON
+    // MUỐN CRUD TABLE THÌ PHẢI NHỜ VẢ ÔNG ENTITY-MANAGER ĐƯỢC CUNG CẤP TỪ JpaUtil SINGLETON
 
     // FLOW: UI --- SERVICE --- REPOSITORY --- JpaUtil --- DATABASE
 

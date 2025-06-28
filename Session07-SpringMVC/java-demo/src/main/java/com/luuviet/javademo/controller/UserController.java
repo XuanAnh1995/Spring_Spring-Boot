@@ -2,7 +2,17 @@ package com.luuviet.javademo.controller;
 
 import com.luuviet.javademo.dto.request.UserCreateRequest;
 import com.luuviet.javademo.dto.request.UserUpdateRequest;
+import com.luuviet.javademo.dto.response.ResponseData;
+import com.luuviet.javademo.dto.response.ResponseSuccess;
 import com.luuviet.javademo.model.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,36 +21,39 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
 
-//    @PostMapping("/")
-    @RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey = v1.0")
-    public String addUser(@RequestBody UserCreateRequest userCreateRequest) {
-        return "Success add user";
+
+    @PostMapping("")
+    public ResponseData<Integer> addUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
+        System.out.println("userCreateRequest: " + userCreateRequest.toString());
+        return new ResponseData<>(HttpStatus.CREATED.value(), "User created successfully", 1);
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest userUpdateRequest) {
-        return "Success update user";
+    public ResponseData<?> updateUser(@Min(1) @PathVariable("userId") Integer userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        System.out.println("userUpdateRequest: " + userUpdateRequest.toString());
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "User updated successfully");
     }
 
     @PatchMapping("/{userId}")
-    public String changeStatus(@PathVariable("userId") Integer userId, @RequestParam(required = false) boolean status) {
-        System.out.println("Change User Status: "+status);
-        return "Success change status";
+    public ResponseData<?> changeStatus(@Min(1) @PathVariable("userId") Integer userId, @RequestParam(required = false) boolean status) {
+        System.out.println("Change User Status: " + status);
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "User changed status successfully");
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable("userId") Integer userId) {
-        return "Success delete user";
+    public ResponseData<?> deleteUser(@Min(1) @PathVariable("userId") Integer userId) {
+        System.out.println("Delete User Status: " + userId);
+        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "User deleted successfully");
     }
 
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable("userId") Integer userId) {
-        User user = new User("XuanAnh", "LuuViet", "luuviet@gmail.com", "0988987071");
-        return user;
+    public ResponseData<UserCreateRequest> getUser(@Min(1) @PathVariable("userId") Integer userId) {
+        System.out.println("Get User Status: " + userId);
+        return new ResponseData<>(HttpStatus.OK.value(), "User", new UserCreateRequest("XuanAnh", "LuuViet", "luuviet@gmail.com", "0988987071"));
     }
 
     @GetMapping("/list")
-    public List<User> getUsers() {
-        return List.of(getUser(1), getUser(2), getUser(3));
+    public ResponseData<List<UserCreateRequest>> getUsers() {
+        return new ResponseData<>(HttpStatus.OK.value(), "User", List.of(new UserCreateRequest("XuanAnh", "LuuViet", "luuviet@gmail.com", "0988987071")));
     }
 }

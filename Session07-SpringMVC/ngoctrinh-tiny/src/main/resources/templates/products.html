@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafe Ngọc Trinh</title>
+</head>
+<body>
+<h1>Welcome to Cafe Ngọc Trinh - Management page</h1>
+
+<h2 th:text="'ROLE: ' + ${role}">Role???</h2>
+
+<form th:action="@{/products}" method="get">
+    <input type="text" name="keyword" placeholder="Nhập tên sản phẩm">
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${role == 1}">
+    <p>
+        <a href="/products/new">New/Create</a> |
+        <a href="/products/edit">Update</a>
+    </p>
+</div>
+<p>
+    <a href="/logout">Sign out...</a>
+</p>
+
+<table th:border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="3" th:text="${result}">???</td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

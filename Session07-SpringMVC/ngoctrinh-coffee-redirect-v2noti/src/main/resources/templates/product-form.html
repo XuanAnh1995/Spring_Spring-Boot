@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create | Update coffee product</title>
+</head>
+<body>
+<h1>Create | Update coffee product</h1>
+<!--  TEST THỬ THÔNG TIN ĐƯỢC LOAD ĐÚNG KO-->
+<h2 th:text="${minzy.name}">inner text</h2>
+
+<!--CẦN 1 CÁI FORM , ĐỂ NHẤN NÚT SAVE THÌ LƯU TOÀN BỘ INFO SẢN PHẨM TRONG Ô NHẬP -->
+<!--<form th:action="@{/update}" th:object="${product}" method="post">-->
+<form th:action="@{/products/edit}" method="post">
+    <p>
+        <label for="id">Product id: </label>
+        <input type="text" name="id" th:value="${minzy.id}" id="id">
+    </p>
+
+    <p>
+        <label for="name">Product name: </label>
+        <input type="text" name="name" th:value="${minzy.name}" id="name">
+    </p>
+
+    <p>
+        <label for="price">Product price: </label>
+        <input type="text" name="price" th:value="${minzy.price}" id="price">
+    </p>
+
+<!--    <p>-->
+<!--        <label for="category">Category: </label>-->
+<!--        <select name="category" id="category">-->
+<!--            <option value="100">Trà sữa</option>-->
+<!--            <option value="200" selected="true">Cà phê</option>-->
+<!--            <option value="300">Beer - Nước ngọt</option>-->
+<!--            <option value="400">Bánh kẹo</option>-->
+<!--        </select>-->
+<!--    </p>    -->
+
+    <p>
+        <label for="category">Category: </label>
+        <select name="category" id="category">
+            <option
+                    th:each="x : ${categories}"
+                    th:text="${x.name}"
+                    th:value="${x.id}"
+                    th:selected="${x.id == 200}"
+            >Trà sữa</option>
+        </select>
+    </p>
+
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

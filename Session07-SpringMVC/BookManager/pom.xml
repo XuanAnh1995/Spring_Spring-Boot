@@ -8,11 +8,11 @@
         <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.luuviet.coffee</groupId>
-    <artifactId>ngoctrinh-coffee-v4final</artifactId>
+    <groupId>com.luuviet.bookstore</groupId>
+    <artifactId>BookManager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ngoctrinh-coffee-v4final</name>
-    <description>ngoctrinh-coffee-v4final</description>
+    <name>BookManager</name>
+    <description>BookManager</description>
     <url/>
     <licenses>
         <license/>

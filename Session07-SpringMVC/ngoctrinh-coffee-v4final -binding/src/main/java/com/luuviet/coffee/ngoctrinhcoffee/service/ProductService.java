@@ -38,4 +38,16 @@ public class ProductService {
         productRepo.delete(product);
     }
 
+    // search
+    public List<Product> searchProductsByName(String keyword){
+        return productRepo.searchAllByNameIsContainingIgnoreCase(keyword);
+    }
+
+    // HÀM KHÁC ... KIỂM TRA SỰ TỒN TẠI CỦA 1 ROW PRODUCT THEO ID
+    // THAY VÌ TÌM 1 DÒNG, TRẢ LẠI NULL HAY DÒNG TÌM THẤY
+
+    public boolean existsProductById(String id){
+        return productRepo.existsById(id);
+    }
+
 }

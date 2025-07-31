@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
 </head>
 <body>
+<h1> Login process</h1>
+<p>
+    <span th:if="${error}" th:text="${error}" style="color: deeppink; font-weight: bold">???</span>
+</p>
+<p>
+<form th:action="@{'/auth'}" method="post">
+    <p>
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" required="required">
+    </p>
 
+    <p>
+        <label for="pass">Password</label>
+        <input type="text" name="pass" id="pass" required="required">
+    </p>
+
+    <p>
+        <button type="submit">Login</button>
+    </p>
+</form>
+</p>
 </body>
 </html>

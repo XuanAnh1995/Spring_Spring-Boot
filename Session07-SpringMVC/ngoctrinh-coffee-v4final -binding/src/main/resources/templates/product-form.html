@@ -5,32 +5,39 @@
     <title>Form Update Product</title>
 </head>
 <body>
-<h1>Update Product</h1>
+<h1 th:if="${formMode == 'update'}">Update Product</h1>
+<h1 th:if="${formMode == 'create'}">Create A New Product</h1>
+
 <form th:action="@{'/products/save'}" method="post" th:object="${selectProduct}">
     <p>
         <label for="id">ID: </label>
-        <input type="text" id="id" th:field="*{id}">
-<!--                   *{id} ~~~ selectProduct.id-->
-<!--        th:filed đóng 2 vai trò:
-            // 1. tự sinh ra 1 attribute cho ô text này tên là name = tên cột nó đang chỉ định , tên cột đang map vào object ở trên name = id
-            // 2. điền value của cột vào ô nhập
+        <input type="text" id="id" th:field="*{id}" th:readonly="${formMode == 'update'}">
+        <span style="color:red" th:errors="*{id}">???</span>
+        <span style="color:red" th:if="${duplicated}" th:text="${duplicated}">???</span>
+        <!--                   *{id} ~~~ selectProduct.id-->
+        <!--        th:filed đóng 2 vai trò:
+                    // 1. tự sinh ra 1 attribute cho ô text này tên là name = tên cột nó đang chỉ định , tên cột đang map vào object ở trên name = id
+                    // 2. điền value của cột vào ô nhập
 
--->
+        -->
     </p>
     <p>
         <label for="name">Name: </label>
         <input type="text" id="name" th:field="*{name}">
-<!--                                 name = "name" value = selectProduct.name-->
+        <span style="color:red" th:errors="*{name}">???</span>
+        <!--                                 name = "name" value = selectProduct.name-->
     </p>
     <p>
         <label for="quantity">Quantity: </label>
         <input type="number" id="quantity" th:field="*{quantity}">
-<!--                                        name = "quantity" value = selectProduct.quantity-->
+        <span style="color:red" th:errors="*{quantity}">???</span>
+        <!--                                        name = "quantity" value = selectProduct.quantity-->
     </p>
     <p>
         <label for="price">Price: </label>
         <input type="number" id="price" th:field="*{price}">
-<!--                                    name = "price" value = selectProduct.price-->
+        <span style="color:red" th:errors="*{price}">???</span>
+        <!--                                    name = "price" value = selectProduct.price-->
     </p>
     <p>
         <label for="category">Category: </label>
@@ -39,12 +46,18 @@
                     th:value="${x.id}"
                     th:text="${x.name}"
                     th:selected="${selectProduct.category != null and selectProduct.category.id == x.id}"
-            >???</option>
+            >???
+            </option>
         </select>
     </p>
     <p>
         <button type="submit">Save</button>
     </p>
+
+    <p>
+        <input type="hidden" name="mode" th:value="${formMode}">
+    </p>
+
 </form>
 </body>
 </html>

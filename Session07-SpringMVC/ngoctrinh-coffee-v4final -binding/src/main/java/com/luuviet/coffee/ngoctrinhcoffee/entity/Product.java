@@ -1,22 +1,38 @@
 package com.luuviet.coffee.ngoctrinhcoffee.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name ="Product")
 public class Product {
 
     @Id
-    @Column(name = "Id", columnDefinition = "CHAR(10)")
+    @Column(name = "Id", columnDefinition = "CHAR(4)")     // DB GENERATE TABLE/CỘT
+    @NotBlank(message = "Id is required! - Phải nhập id ")
+    @Size(min = 4, max = 4, message = "Id must be 4 characters")
     private String id;
 
     @Column(name = "Name", columnDefinition = "NVARCHAR(50)", nullable = false)
+    @NotBlank(message = "Name is required! - Phải nhập tên")    // Validation từ form nhập đưa lên
+    @Size(min = 5, max = 50, message = "Name length must be between 5 ... 50 characters")
+    @Pattern(
+            regexp = "^(\\p{Lu}\\p{Ll}+)(\\s\\p{Lu}\\p{Ll}+)*$",
+            message = "Mỗi từ phải bắt đầu hoa, chỉ chứa chữ (Unicode), không số/ký tự đặc biệt, không khoảng trắng thừa"
+
+    )
     private String name;
 
     @Column(name = "Quantity", nullable = false)
+    @NotNull(message = "Quantity is required")
+    @Min(value = 5, message = "Quantity must be between 5 ... 10000")
+    @Max(value = 10000, message = "Quantity must be between 5 ... 10000")
     private int quantity;
 
     @Column(name = "Price", nullable = false)
+    @NotNull(message = "Price is required")
+    @Min(value = 10_000, message = "Price must be between 10k ... 100M")
+    @Max(value = 100_000_000, message = "Price must be between 10k ... 100M")
     private double price;
 
     // MAPPING MỐI QUAN HỆ GIỮA CATEGORY-PRODUCT

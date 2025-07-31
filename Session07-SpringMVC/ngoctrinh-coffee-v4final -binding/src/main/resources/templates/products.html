@@ -5,36 +5,52 @@
     <title>The main page > List of products</title>
 </head>
 <body>
-    <h1>List of Ngoc Trinh products</h1>
-    <a th:href="@{'/products/create'}">New product</a>
+<h1>List of Ngoc Trinh products</h1>
+<p th:text="${'Hello, '+ session.loggedInUser.getEmail()}" style="color: deeppink; font-weight: bold">???</p>
+<p>
+<form th:action="@{/products}" method="get">
+        <label for="kw"> Keyword: </label>
+        <input id="kw" name="kw" type="text" placeholder="Search by name">
+        <button type="submit">Search</button>
+</form>
+</p>
 
-    <table th:border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Category_Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody th:each="x: ${products}">
-            <tr>
-                <td th:text="${x.id}"></td>
-                <td th:text="${x.name}"></td>
-                <td th:text="${x.quantity}"></td>
-                <td th:text="${x.price}"></td>
-                <td th:text="${x.category.name}"></td>
-                <td>
-                    <a th:href="@{'/products/update/' + ${x.id}}">Update</a>    |
-                    <a th:href="@{'/products/delete/' + ${x.id}}"
-                       th:onclick="return confirm('Are you sure ?')"
-                    >Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div th:if="${products.isEmpty()}">
+    <p style="color: red; font-weight: bold">No such product</p>
+</div>
+
+<!--Admin show ra nút bấm Create-->
+<p th:if="${session.loggedInUser.role == 1}">
+    <a th:href="@{'/products/create'}">New product</a>
+</p>
+
+<table th:border="1" th:unless="${products.isEmpty()}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Category_Name</th>
+        <th th:if="${session.loggedInUser.role == 1}">Action</th>
+    </tr>
+    </thead>
+    <tbody th:each="x: ${products}">
+    <tr>
+        <td th:text="${x.id}"></td>
+        <td th:text="${x.name}"></td>
+        <td th:text="${x.quantity}"></td>
+        <td th:text="${x.price}"></td>
+        <td th:text="${x.category.name}"></td>
+        <td th:if="${session.loggedInUser.role == 1}">
+            <a th:href="@{'/products/update/' + ${x.id}}">Update</a> |
+            <a th:href="@{'/products/delete/' + ${x.id}}"
+               th:onclick="return confirm('Are you sure ?')"
+            >Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
